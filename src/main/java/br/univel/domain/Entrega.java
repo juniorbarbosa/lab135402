@@ -1,4 +1,4 @@
-package domain;
+package br.univel.domain;
 
 import java.io.Serializable;
 

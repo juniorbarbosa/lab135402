@@ -1,4 +1,4 @@
-package rest;
+package br.univel.ejb;
 
 import javax.ejb.Stateless;
 
