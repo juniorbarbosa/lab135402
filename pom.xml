@@ -4,6 +4,8 @@
 	<groupId>br.univel</groupId>
 	<artifactId>lab135402</artifactId>
 	<version>1.0</version>
+	
+	<packaging>war</packaging>
 
 	<properties>
 		<!-- Explicitly declaring the source encoding eliminates the following 
