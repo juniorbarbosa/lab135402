@@ -1,20 +1,15 @@
 package br.univel.servlet;
 
 import java.io.IOException;
-import javax.annotation.Resource;
+import java.io.PrintWriter;
+
 import javax.inject.Inject;
-import javax.jms.Destination;
 import javax.jms.JMSContext;
-import javax.jms.ObjectMessage;
-import javax.jms.Queue;
-import javax.jms.Topic;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import br.univel.domain.Venda;
 
 //@JMSDestinationDefinitions(value = {
 //		@JMSDestinationDefinition(name = "java:/queue/QueuePedido", interfaceName = "javax.jms.Queue", destinationName = "QueuePedido"),
@@ -22,30 +17,16 @@ import br.univel.domain.Venda;
 @WebServlet("/Config")
 public class Config extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -1174969012687162808L;
+	
 	@Inject
 	private JMSContext context;
 
-	@Resource(lookup = "java:/queue/QueuePedido")
-	private Queue queue;
-
-	@Resource(lookup = "java:/topic/TopicVenda")
-	private Topic topic;
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		try {
-			boolean useTopic = req.getParameterMap().keySet().contains("topic");
-			final Destination destination = useTopic ? topic : queue;
-			Venda venda = new Venda();
-			ObjectMessage objectMessage = context.createObjectMessage();
-			objectMessage.setObject(venda);
-			context.createProducer().send(destination, objectMessage);
-
-		} catch (Throwable th) {
-			th.printStackTrace();
-		}
+		resp.setContentType("text/html");
+        PrintWriter out = resp.getWriter();
+        out.write("Config");
 	}
 
 	@Override

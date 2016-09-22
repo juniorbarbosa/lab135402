@@ -9,6 +9,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import br.univel.domain.Entrega;
 import br.univel.domain.Venda;
 
 @MessageDriven(name = "MdbLogistica", activationConfig = {
@@ -26,8 +27,8 @@ public class MdbLogistica implements MessageListener {
 		try {
 			if (receivedMsg instanceof ObjectMessage) {
 				msg = (ObjectMessage) receivedMsg;
-				Venda venda = (Venda) msg.getObject();
-				LOGGER.info("Objeto recebido: " + venda);
+				Entrega entrega = (Entrega) msg.getObject();
+				LOGGER.info("Objeto recebido: " + entrega);
 
 				LOGGER.info("Mensagem recebida");
 				try {
