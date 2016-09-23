@@ -7,7 +7,11 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import br.univel.domain.Venda;
+import br.univel.model.Log;
 
 @MessageDriven(name = "MdbFinanceiro", activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "topic/TopicVenda"),
@@ -17,6 +21,9 @@ import br.univel.domain.Venda;
 public class MdbFinanceiro implements MessageListener {
 
 	private final static Logger LOGGER = Logger.getLogger(MdbFinanceiro.class.toString());
+	
+	@PersistenceContext(unitName = "lab135402-persistence-unit")
+	private EntityManager em;
 
 	@Override
 	public void onMessage(Message receivedMsg) {
@@ -25,7 +32,16 @@ public class MdbFinanceiro implements MessageListener {
 			if (receivedMsg instanceof ObjectMessage) {
 				msg = (ObjectMessage) receivedMsg;
 				Venda venda = (Venda) msg.getObject();
-				LOGGER.info("Objeto recebido: " + venda);
+				
+				Log log = new Log();
+				log.setMdb(MdbFinanceiro.class.toString());
+				log.setData("01/01/0000");
+				log.setHora("00:00:00");
+				log.setInformacoes("Objeto recebido: " + venda);
+				
+				em.persist(log);
+				
+//				LOGGER.info("Objeto recebido: " + venda);
 			} else {
 				LOGGER.warning("Objeto do tipo errado: " + receivedMsg.getClass().getName());
 			}
